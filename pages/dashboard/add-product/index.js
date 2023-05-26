@@ -293,6 +293,7 @@ const Index = () => {
                   <MenuItem value="3-piece">3-piece</MenuItem>
                   <MenuItem value="2-piece">2-piece</MenuItem>
                   <MenuItem value="single">single</MenuItem>
+                  <MenuItem value="single">single</MenuItem>
                   <MenuItem value="none">None</MenuItem>
                 </Select>
               </FormControl>

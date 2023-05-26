@@ -15,7 +15,7 @@ import Paper from "@mui/material/Paper";
 function Orderdetail() {
   const order = useSelector((state) => state.order);
   const [orderProducts, setorderProducts] = useState([]);
-  console.log("order", order.orders.orders.products);
+
   const [loading, setloading] = useState(false);
   const router = useRouter();
 
@@ -41,12 +41,6 @@ function Orderdetail() {
     });
     return sum;
   }
-
-  const rows = [
-    createRow("Paperclips (Box)", 100, 1.15),
-    createRow("Paper (Case)", 10, 45.99),
-    createRow("Waste Basket", 2, 17.99),
-  ];
 
   const invoiceSubtotal = subtotal(orderProducts);
   const invoiceTaxes = TAX_RATE * invoiceSubtotal;
@@ -76,7 +70,7 @@ function Orderdetail() {
     } else {
       setloading(false);
     }
-  }, [router.pathname]);
+  }, []);
 
   const columns = [
     {
@@ -107,7 +101,7 @@ function Orderdetail() {
     },
     {
       accessorKey: "show",
-      header: "Products",
+      header: "action",
       Cell: ({ row }) => (
         <Button variant="contained" onClick={() => handleAction(row.original)}>
           List Product
@@ -188,15 +182,7 @@ function Orderdetail() {
                           {invoiceSubtotal}
                         </TableCell>
                       </TableRow>
-                      {/* <TableRow>
-                      <TableCell>Tax</TableCell>
-                      <TableCell align="right">{`${(TAX_RATE * 100).toFixed(
-                        0
-                      )} %`}</TableCell>
-                      <TableCell align="right">
-                        {ccyFormat(invoiceTaxes)}
-                      </TableCell>
-                    </TableRow> */}
+
                       <TableRow>
                         <TableCell colSpan={2}>Total</TableCell>
                         <TableCell align="right">{invoiceSubtotal}</TableCell>

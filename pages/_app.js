@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
 
   const router = useRouter();
   const [loading, setloading] = useState(false);
-  console.log(router.pathname.startsWith("/dashboard"));
+
   const showNavbar = router.pathname.startsWith("/dashboard");
 
   useEffect(() => {
