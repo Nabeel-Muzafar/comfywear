@@ -55,6 +55,11 @@ export default function Allproduct() {
       size: 120,
     },
     {
+      accessorKey: "size",
+      header: "Size",
+      size: 120,
+    },
+    {
       accessorKey: "rate",
       header: "Price",
       size: 300,

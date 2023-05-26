@@ -16,6 +16,7 @@ const handler = async (req, res) => {
       stuff,
       category,
       status,
+      size,
       // variant,
     } = req.body.data;
     const picture = req.body.picUrl;
@@ -34,6 +35,7 @@ const handler = async (req, res) => {
         stuff: stuff,
         category: category,
         status: status,
+        size: size,
         // variantStatus: variantStatus,
         // variant: variantStatus === "no" ? null : variant,
       });

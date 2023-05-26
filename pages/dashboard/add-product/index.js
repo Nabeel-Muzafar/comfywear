@@ -254,6 +254,36 @@ const Index = () => {
                   <MenuItem value="Select-option">Select-option</MenuItem>
                   <MenuItem value="comfywear">Comfy Wear</MenuItem>
                   <MenuItem value="bin-saeed">Bin Saeed</MenuItem>
+                  <MenuItem value="Sada-Bahar">Sada Bahar</MenuItem>
+                  <MenuItem value="Rawayat">Rawayat</MenuItem>
+                  <MenuItem value="Zahra-Rubab">Zarah-Rubab</MenuItem>
+                  <MenuItem value="Galaxy">Galaxy</MenuItem>
+                  <MenuItem value="IGF">IGF</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box width={"20%"}>
+              <FormControl fullWidth>
+                <InputLabel id="age">Select Size</InputLabel>
+                <Select
+                  id="age"
+                  style={{ width: "70%" }}
+                  label="Select-option"
+                  placeholder="Select-option"
+                  {...register("size")}
+                >
+                  <MenuItem value="Select-option">Select-option</MenuItem>
+                  <MenuItem value="S">S</MenuItem>
+                  <MenuItem value="M">M</MenuItem>
+                  <MenuItem value="L">L</MenuItem>
+                  <MenuItem value="XL">XL</MenuItem>
+                  <MenuItem value="32">32</MenuItem>
+                  <MenuItem value="34">34</MenuItem>
+                  <MenuItem value="36">36</MenuItem>
+                  <MenuItem value="38">38</MenuItem>
+                  <MenuItem value="40">40</MenuItem>
+                  <MenuItem value="42">42</MenuItem>
+                  <MenuItem value="44">44</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -275,6 +305,7 @@ const Index = () => {
                   <MenuItem value="Silk">Silk</MenuItem>
                   <MenuItem value="Chiffon">Chiffon</MenuItem>
                   <MenuItem value="Organza">Organza</MenuItem>
+                  <MenuItem value="Net">Net</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -292,8 +323,13 @@ const Index = () => {
                   <MenuItem value="none">Select-option</MenuItem>
                   <MenuItem value="3-piece">3-piece</MenuItem>
                   <MenuItem value="2-piece">2-piece</MenuItem>
-                  <MenuItem value="single">single</MenuItem>
-                  <MenuItem value="single">single</MenuItem>
+                  <MenuItem value="shirt">shirt</MenuItem>
+                  <MenuItem value="trosure">trosure</MenuItem>
+                  <MenuItem value="shirt-trouser">shirt-trouser</MenuItem>
+                  <MenuItem value="Bra">Bra</MenuItem>
+                  <MenuItem value="Nighty">Nighty</MenuItem>
+                  <MenuItem value="Panty">Panty</MenuItem>
+                  <MenuItem value="Organza">Organza</MenuItem>
                   <MenuItem value="none">None</MenuItem>
                 </Select>
               </FormControl>
