@@ -117,7 +117,7 @@ function Orderdetail() {
 
   return (
     <>
-      {order ? (
+      {order.length ? (
         loading ? (
           <CircularProgress />
         ) : (
@@ -136,7 +136,11 @@ function Orderdetail() {
                 Date : {order.orders ? order.orders.date : ""}
               </Typography>
             </Box>
-            <Table2 data={order.orders.orders} columns={columns} />
+            {order ? (
+              <>
+                <Table2 data={order.orders.orders} columns={columns} />
+              </>
+            ) : null}
 
             <Modal
               open={open}
