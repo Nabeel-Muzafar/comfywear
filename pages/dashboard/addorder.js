@@ -1,4 +1,10 @@
 import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import useScanDetection from "use-scan-detection";
 import { useSelector } from "react-redux";
@@ -43,33 +49,6 @@ function AddOrder() {
   const [snackbar, setsnackbar] = React.useState({ msg: "", status: "" });
 
   const products = useSelector((state) => state.product.products);
-
-  function handleScanDetection(barcode) {
-    const product = getProduct(barcode);
-    if (!product) return;
-
-    if (alreadyExistsInRow(product.productCode)) updateCurrentRow(product);
-    else
-      setRows([
-        ...rows,
-        createRow(
-          product.productTitle,
-          1,
-          product.salePrice,
-          product.productCode,
-          product
-        ),
-      ]);
-  }
-
-  React.useEffect(() => {
-    if (typeof document !== "undefined") {
-      useScanDetection({
-        onComplete: handleScanDetection,
-        minLength: 2,
-      });
-    }
-  }, []);
 
   React.useEffect(() => {
     const invoiceSubtotal = subtotal(rows);
@@ -130,6 +109,29 @@ function AddOrder() {
     }
     return null;
   }; //
+
+  if (typeof document !== "undefined") {
+    useScanDetection({
+      onComplete: (barcode) => {
+        const product = getProduct(barcode);
+        if (!product) return;
+
+        if (alreadyExistsInRow(product.productCode)) updateCurrentRow(product);
+        else
+          setrows([
+            ...rows,
+            createRow(
+              product.productTitle,
+              1,
+              product.salePrice,
+              product.productCode,
+              product
+            ),
+          ]);
+      },
+      minLength: 2,
+    });
+  }
 
   const handledeleteRow = (index) => {
     const newState = rows.filter((r, i) => i !== index);
