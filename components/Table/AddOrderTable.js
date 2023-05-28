@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 function AddOrderTable({
+  reff,
   rows,
   invoiceSubtotal,
   invoiceDiscount,
@@ -19,6 +20,7 @@ function AddOrderTable({
   };
   return (
     <TableContainer
+      ref={reff}
       component={Paper}
       sx={{ width: "97%", mx: "auto", marginTop: "20px" }}
     >

@@ -272,6 +272,7 @@ function AddOrder() {
       if (res.data.success) {
         // setsnackbar({ msg: "Order Placed Successfully", status: "success" });
         toast.success("Order Placed Successfully");
+        handlePrint();
         handleReset();
       }
     } catch (error) {
@@ -335,6 +336,7 @@ function AddOrder() {
         />
       </Paper>
       <AddOrderTable
+        reff={componentRef}
         rows={rows}
         invoiceSubtotal={screenData.invoiceSubtotal}
         invoiceDiscount={screenData.invoiceDiscount}
