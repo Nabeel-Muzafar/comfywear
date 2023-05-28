@@ -12,6 +12,7 @@ import { CircularProgress } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setProduct } from "../store/productSlice";
 import axios from "axios";
+import { setOrder } from "../store/orderSlice";
 
 function MyApp({ Component, pageProps }) {
   // const dispatch = useDispatch();
@@ -24,10 +25,12 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const fetchdata = async () => {
-      const responce = await axios.get("/api/getProducts");
-      console.log(responce.data.payload);
+      const responce1 = await axios.get("/api/getProducts");
+      const responce2 = await axios.get("/api/getOrders");
+
       // setdata(responce.data.payload);
-      store.dispatch(setProduct(responce.data.payload));
+      store.dispatch(setProduct(responce1.data.payload));
+      store.dispatch(setOrder(responce2.data.payload));
     };
     fetchdata();
   }, []);

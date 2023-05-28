@@ -94,7 +94,7 @@ const Index = () => {
     if (file.type !== "image/jpeg" && file.type !== "image/png") {
       // format error
 
-      toast("only JPEG and PNG are allowed");
+      toast.error("only JPEG and PNG are allowed");
 
       return;
     }

@@ -1,29 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema({
+  totalEarning: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  date: {
+    type: String,
+    required: true,
+  },
 
-    totalEarning: {
-        type: Number,
-        required: true,
-        default:0
-    },
-    date:{
-        type:String,
-        required:true
-    },
+  branch: {
+    type: String,
+    required: true,
+  },
 
-    branch:{
-        type:String,
-        required:true
-    },
-
-    orders: []
-
-
+  orders: [],
 });
 mongoose.models = {};
 module.exports = mongoose.model("order", OrderSchema);
-
 
 // orders: [{
 //     name:String,
@@ -41,6 +37,7 @@ module.exports = mongoose.model("order", OrderSchema);
 //         rate:Number,
 //         salePrice:Number,
 //         qty:Number,
+//         discount:number
 //         _id:String
 //     }]
 

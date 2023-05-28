@@ -35,10 +35,7 @@ function Navbar() {
     user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       if (user.type != "ADMIN") {
-        setPages([
-          { name: "Dashboard", link: "" },
-          { name: "Orders", link: "addorder" },
-        ]);
+        setPages([{ name: "Orders", link: "addorder" }]);
       }
     }
   }, []);
@@ -64,20 +61,28 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      style={{
+        backgroundColor: "#556cd6",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
             noWrap
             component="a"
+            style={{
+              marginRight: "1rem",
+            }}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "white",
               textDecoration: "none",
             }}
           >

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Table from "../../components/Table/MaterialTable";
 import axios from "axios";
-import { Box, CircularProgress, Typography, Button } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  Button,
+  Backdrop,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { setProduct } from "../../store/productSlice";
@@ -13,6 +19,15 @@ export default function Allproduct() {
   const [data, setdata] = useState([]);
   const router = useRouter();
   const [loading, setloading] = useState(false);
+  const [againFetch, setagainFetch] = useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   useEffect(() => {
     setloading(true);
@@ -22,6 +37,15 @@ export default function Allproduct() {
       setloading(false);
     }
   }, []);
+  useEffect(() => {
+    const fetchdata = async () => {
+      const responce = await axios.get("/api/getProducts");
+
+      // setdata(responce.data.payload);
+      dispatch(setProduct(responce.data.payload));
+    };
+    fetchdata();
+  }, [againFetch]);
 
   const columns = [
     {
@@ -62,7 +86,7 @@ export default function Allproduct() {
     {
       accessorKey: "rate",
       header: "Price",
-      size: 300,
+      // size: 300,
     },
     {
       accessorKey: "status",
@@ -71,15 +95,36 @@ export default function Allproduct() {
     {
       accessorKey: "discount",
       header: "Discount",
-      size: 220,
+      size: 100,
     },
     {
       accessorKey: "show",
       header: "action",
       Cell: ({ row }) => (
-        <Button variant="contained" onClick={() => handleAction(row.original)}>
-          Edit
-        </Button>
+        <>
+          <Box display={"flex"} gap={"1rem"}>
+            <Button
+              variant="contained"
+              onClick={() => handleAction(row.original)}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="contained"
+              color="warning"
+              onClick={() => handleDelete(row.original._id)}
+            >
+              delete
+            </Button>
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={open}
+              onClick={handleClose}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          </Box>
+        </>
       ),
     },
   ];
@@ -87,6 +132,22 @@ export default function Allproduct() {
   const handleAction = (id) => {
     dispatch(setProduct(id));
     router.push("/dashboard/editProduct");
+  };
+
+  const handleDelete = async (id) => {
+    // dispatch(setProduct(id));
+    // console.log(id);
+
+    handleOpen();
+    const responce = await axios.post("/api/deleteProduct", { key: id });
+    // router.push("/dashboard/editProduct");
+    // console.log(responce);
+    if (responce.data.success) {
+      setagainFetch(!againFetch);
+      handleClose();
+    } else {
+      handleClose();
+    }
   };
 
   return (

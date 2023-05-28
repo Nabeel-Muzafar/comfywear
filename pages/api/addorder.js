@@ -17,83 +17,54 @@ const handler = async (req, res, client) => {
     const { totalItems, products, date } = req.body.newObj;
     const { branch, ...order } = req.body.newObj;
 
-// if(!(order.paid >= order.total))
-// return res.send({success:false,payload:"Order failed. Kindly pay full amount"})
-
-
     const session = client.startSession();
     try {
       // Start a session
       await session.withTransaction(async () => {
+        const updatePromises = [];
 
-//         for (let i = 0; i < totalItems; i++) {
+        for (let i = 0; i < totalItems; i++) {
+          updatePromises.push(
+            Product.findByIdAndUpdate(
+              { _id: products[i]._id },
+              { $inc: { quantity: -products[i].qty } },
+              { session }
+            )
+          );
+        }
+        await Promise.all(updatePromises);
 
-//           await Product.findByIdAndUpdate(
-//             { _id: [products[i]._id] },
-//             { $inc: { quantity: -products[i].qty } },
-//             { session }
-//           )
-// console.log("i : ",i)
-//         }
-const updatePromises = [];
-
-for (let i = 0; i < totalItems; i++) {
-  updatePromises.push(
-    Product.findByIdAndUpdate(
-      { _id: products[i]._id },
-      { $inc: { quantity: -products[i].qty } },
-      { session }
-    )
-  );
-  console.log(i)
-}
-await Promise.all(updatePromises);
-console.log("after loop")
         const result = await Orders.findOneAndUpdate(
           { $and: [{ date: date }, { branch: branch }] },
-          { $push: { orders: order } },
-          {session}
-
-        )
-
+          {
+            $push: { orders: order },
+            $inc: {
+              totalEarning: req.body.newObj.total,
+            },
+          },
+          { session }
+        );
 
         if (result) return res.send({ success: true });
 
         // no document found. creating a new one
-        const newOrder = new Orders(
-          {orders:[order],
-            branch:branch,
-            date:date,
-          }
-        );
-  
+        const newOrder = new Orders({
+          orders: [order],
+          branch: branch,
+          date: date,
+          totalEarning: req.body.newObj.total,
+        });
+
         // Save the order to the database
-         await newOrder.save();
-        res.send({ success: true })
-
-
-      })
-
-
+        await newOrder.save();
+        res.send({ success: true });
+      });
     } catch (error) {
-      console.log(error)
-      res.send({ success: false, payload: "Network Error" })
-    }
-    finally {
+      console.log(error);
+      res.send({ success: false, payload: "Network Error" });
+    } finally {
       if (session) await session.endSession();
     }
-
-
-
-
-
-
-
-
-
-
-
-
   } else {
     res.send({ success: false });
   }
