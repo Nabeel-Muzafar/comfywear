@@ -1,12 +1,11 @@
 import userModel from "../schema/userSchema";
 
 export async function getUser(req, res) {
+  const { username, password } = req.body;
 
-    const { username, password } = req.body;
-
-    const user = await userModel.findOne({ username: username }, "-password");
-    return user;
-
-
-
+  const user = await userModel.findOne(
+    { username: username, password: password },
+    "-password"
+  );
+  return user;
 }
