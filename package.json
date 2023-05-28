@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "export-to-csv": "^0.2.1",
+    "html2canvas": "^1.4.1",
     "jsonwebtoken": "^9.0.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.29",

@@ -27,6 +27,7 @@ function Navbar() {
     { name: "All Product", link: "allproduct" },
     { name: "Orders", link: "addorder" },
     { name: "All Orders", link: "allorders" },
+    { name: "Invoice", link: "invoice" },
   ]);
 
   let user;
