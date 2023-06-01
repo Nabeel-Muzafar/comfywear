@@ -40,7 +40,7 @@ const Table = ({ data, columns }) => {
 
     var doc = new jsPDF();
 
-    doc.setFontSize(25);
+    doc.setFontSize(22);
 
     for (let j = 0; j < data2.length; j++) {
       doc.text(data2[j].productTitle, 40, 10);
@@ -48,7 +48,7 @@ const Table = ({ data, columns }) => {
       doc.text(data2[j].productCode, 40, 20);
       doc.text(data2[j].size, 40, 30);
       doc.text(data2[j].rate.toString(), 40, 40);
-      doc.addImage(data2[j].productImage, "JPEG", 15, 60, 180, 210);
+      doc.addImage(data2[j].productImage, "JPEG", 15, 60, 180, 200);
       doc.addPage("a4", "1");
     }
 
@@ -68,7 +68,7 @@ const Table = ({ data, columns }) => {
 
     var doc = new jsPDF();
 
-    doc.setFontSize(25);
+    doc.setFontSize(22);
 
     for (let j = 0; j < data2.length; j++) {
       doc.text(data2[j].productTitle, 40, 10);
@@ -76,7 +76,7 @@ const Table = ({ data, columns }) => {
       doc.text(data2[j].productCode, 40, 20);
       doc.text(data2[j].size, 40, 30);
       doc.text(data2[j].rate.toString(), 40, 40);
-      doc.addImage(data2[j].productImage, "JPEG", 15, 60, 180, 210);
+      doc.addImage(data2[j].productImage, "JPEG", 15, 60, 180, 200);
       doc.addPage("a4", "1");
     }
 
