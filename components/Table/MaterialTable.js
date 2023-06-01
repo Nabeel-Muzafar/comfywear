@@ -61,6 +61,7 @@ const Table = ({ data, columns }) => {
       productTitle: obj.productTitle,
       productCode: obj.productCode,
       productImage: obj.productImage,
+      category: obj.category,
       rate: obj.rate,
       size: obj.size,
     }));
@@ -69,12 +70,13 @@ const Table = ({ data, columns }) => {
 
     doc.setFontSize(25);
 
-    for (let j = 0; j < 5; j++) {
+    for (let j = 0; j < data2.length; j++) {
       doc.text(data2[j].productTitle, 40, 10);
+      doc.text(data2[j].category, 100, 10);
       doc.text(data2[j].productCode, 40, 20);
       doc.text(data2[j].size, 40, 30);
       doc.text(data2[j].rate.toString(), 40, 40);
-      doc.addImage(data2[j].productImage, "JPEG", 15, 50, 180, 180);
+      doc.addImage(data2[j].productImage, "JPEG", 15, 60, 180, 210);
       doc.addPage("a4", "1");
     }
 
