@@ -37,6 +37,7 @@ const Table = ({ data, columns }) => {
       rate: obj.rate,
       size: obj.size,
     }));
+    console.log(data2);
 
     var doc = new jsPDF();
 
@@ -66,6 +67,7 @@ const Table = ({ data, columns }) => {
       size: obj.size,
     }));
 
+    console.log(data2);
     var doc = new jsPDF();
 
     doc.setFontSize(22);
