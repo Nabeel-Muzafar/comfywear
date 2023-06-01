@@ -5,6 +5,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { setOrder } from "../../store/orderSlice";
+import { jsPDF } from "jspdf";
 
 const Allorders = () => {
   const dispatch = useDispatch();

@@ -4,13 +4,7 @@ import { Box, Button } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { ExportToCsv } from "export-to-csv"; //or use your library of choice here
 // import { data } from "./makeData";
-
-import { Document, Page, Text, View, PDFViewer } from "@react-pdf/renderer";
-
-import dynamic from "next/dynamic";
-const PDFTable = dynamic(() => import("./GeneratePdf"), {
-  ssr: false, // Ensure the component is only loaded on the client-side
-});
+import { jsPDF } from "jspdf";
 
 //defining columns outside of the component is fine, is stable
 
@@ -32,39 +26,60 @@ const Table = ({ data, columns }) => {
 
   const csvExporter = new ExportToCsv(csvOptions);
   const handleExportRows = (rows) => {
-    csvExporter.generateCsv(rows.map((row) => row.original));
+    // csvExporter.generateCsv(rows.map((row) => row.original));
+    let products = rows.map((row) => row.original);
+
+    const data2 = products.map((obj) => ({
+      productTitle: obj.productTitle,
+      productCode: obj.productCode,
+      productImage: obj.productImage,
+      category: obj.category,
+      rate: obj.rate,
+      size: obj.size,
+    }));
+
+    var doc = new jsPDF();
+
+    doc.setFontSize(25);
+
+    for (let j = 0; j < data2.length; j++) {
+      doc.text(data2[j].productTitle, 40, 10);
+      doc.text(data2[j].category, 100, 10);
+      doc.text(data2[j].productCode, 40, 20);
+      doc.text(data2[j].size, 40, 30);
+      doc.text(data2[j].rate.toString(), 40, 40);
+      doc.addImage(data2[j].productImage, "JPEG", 15, 60, 180, 210);
+      doc.addPage("a4", "1");
+    }
+
+    // csvExporter.generateCsv(data2);
+    doc.save("selectedProdutc.pdf");
   };
 
   const handleExportData = () => {
-    console.log(
-      "data",
-      data.productCode,
-      data.productImage,
-      data.productTitle,
-      data.quantity,
-      data.rate,
-      data.size
-    );
-    // let data2 = [];
-    // for (let i = 0; i < data.length; i++) {
-    //   data[i] = {
-    //     productCode: data[i].productCode,
-    //     productTitle: data[i].productTitle,
-    //     productImage: data[i].productImage,
-    //     quantity: data[i].quantity,
-    //     rate: data[i].rate,
-    //     size: data[i].size,
-    //   };
-    // }
     const data2 = data.map((obj) => ({
+      productTitle: obj.productTitle,
       productCode: obj.productCode,
       productImage: obj.productImage,
       rate: obj.rate,
       size: obj.size,
     }));
 
-    console.log(data2);
-    csvExporter.generateCsv(data2);
+    var doc = new jsPDF();
+
+    doc.setFontSize(25);
+
+    for (let j = 0; j < 5; j++) {
+      doc.text(data2[j].productTitle, 40, 10);
+      doc.text(data2[j].productCode, 40, 20);
+      doc.text(data2[j].size, 40, 30);
+      doc.text(data2[j].rate.toString(), 40, 40);
+      doc.addImage(data2[j].productImage, "JPEG", 15, 50, 180, 180);
+      doc.addPage("a4", "1");
+    }
+
+    // csvExporter.generateCsv(data2);
+    doc.save("allProducts.pdf");
   };
 
   return (

@@ -7,8 +7,13 @@ import { Card, CardContent, Grid, Typography } from "@material-ui/core";
 function DashBoard() {
   const products = useSelector((state) => state.product.products);
   const orders = useSelector((state) => state.order.orders);
+  const [quantity, setquantity] = useState(0);
   const [loading, setloading] = useState(false);
+  const [township, settownship] = useState(0);
+  const [wapda, setwapda] = useState(0);
+  const [wareHouse, setwareHouse] = useState(0);
   const router = useRouter();
+
   useEffect(() => {
     setloading(true);
     if (!localStorage.getItem("user") || !localStorage.getItem("token")) {
@@ -17,6 +22,36 @@ function DashBoard() {
       setloading(false);
     }
   }, [router.pathname]);
+
+  useEffect(() => {
+    if (products) {
+      let count = 0;
+      for (let i = 0; i < products.length; i++) {
+        count += products[i].quantity;
+      }
+      setquantity(count);
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (orders) {
+      let Wapdacount = 0;
+      let townshipCount = 0;
+      let warehouse = 0;
+      for (let i = 0; i < orders.length; i++) {
+        if (orders[i].branch == "warehouse") {
+          warehouse = orders[i].orders.length;
+          setwareHouse(warehouse);
+        } else if (orders[i].branch == "wapdatown") {
+          Wapdacount = orders[i].orders.length;
+          setwapda(warehouse);
+        } else {
+          townshipCount = orders[i].orders.length;
+          settownship(townshipCount);
+        }
+      }
+    }
+  }, [orders]);
 
   return (
     <>
@@ -42,6 +77,7 @@ function DashBoard() {
                 </CardContent>
               </Card>
             </Grid>
+
             <Grid item xs={12} sm={6} md={3}>
               <Card
                 style={{
@@ -51,15 +87,15 @@ function DashBoard() {
               >
                 <CardContent>
                   <Typography color="white" gutterBottom>
-                    Total Orders
+                    Total Quantity of Product
                   </Typography>
                   <Typography variant="h5" component="h2">
-                    {orders ? orders.length : 0}
+                    {quantity ? quantity : 0}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
-            {/* <Grid item xs={12} sm={6} md={3}>
+            <Grid item xs={12} sm={6} md={3}>
               <Card
                 style={{
                   backgroundColor: "#002884",
@@ -68,14 +104,48 @@ function DashBoard() {
               >
                 <CardContent>
                   <Typography color="white" gutterBottom>
-                    Total Sales
+                    Wapda Town Orders
                   </Typography>
                   <Typography variant="h5" component="h2">
-                    $1000
+                    {wapda ? wapda : 0}
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid> */}
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card
+                style={{
+                  backgroundColor: "#002884",
+                  color: "white",
+                }}
+              >
+                <CardContent>
+                  <Typography color="white" gutterBottom>
+                    Town Ship Orders
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {township ? township : 0}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card
+                style={{
+                  backgroundColor: "#002884",
+                  color: "white",
+                }}
+              >
+                <CardContent>
+                  <Typography color="white" gutterBottom>
+                    Ware House Orders
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {wareHouse ? wareHouse : 0}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
         </>
       )}

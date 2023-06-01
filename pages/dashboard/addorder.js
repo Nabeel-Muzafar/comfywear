@@ -244,7 +244,7 @@ function AddOrder() {
   };
 
   let newObj;
-  console.log("new obj", printData);
+
   const handleOrder = async () => {
     if (rows.length <= 0) return;
     if (parseInt(screenData.paidAmount) < screenData.invoiceTotal) {
@@ -299,7 +299,7 @@ function AddOrder() {
       const res = await axios.post(`/api/addorder`, {
         newObj,
       });
-      console.log(res);
+
       if (res.data.success) {
         // setsnackbar({ msg: "Order Placed Successfully", status: "success" });
         toast.success("Order Placed Successfully");
@@ -488,6 +488,8 @@ function AddOrder() {
                 <Box fontSize={"0.8rem"}>
                   {printData.branch === "wapdatown"
                     ? "Shahrah-e-Nazria, near Wapda Town , Block G Pia Housing Scheme"
+                    : printData.branch === "warehouse"
+                    ? "Ware-house"
                     : "Township Branch"}
                 </Box>
 
