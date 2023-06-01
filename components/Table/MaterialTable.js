@@ -78,7 +78,7 @@ const Table = ({ data, columns }) => {
       doc.text(data2[j].productCode, 40, 20);
       doc.text(data2[j].size, 40, 30);
       doc.text(data2[j].rate.toString(), 40, 40);
-      doc.addImage(data2[j].productImage, "PNG", 15, 60, 150, 150);
+      doc.addImage(data2[j].productImage, "JPEG", 15, 60, 150, 150);
       doc.addPage("a4", "1");
     }
 
