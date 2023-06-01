@@ -13,11 +13,14 @@ import {
   Autocomplete,
   Box,
   Button,
+  Divider,
   FormControl,
   InputLabel,
   MenuItem,
+  Modal,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -61,6 +64,9 @@ function AddOrder() {
     invoiceTotal: 0,
     paidAmount: "",
   });
+  const [printData, setprintData] = React.useState([]);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [snackbar, setsnackbar] = React.useState({ msg: "", status: "" });
   const name = React.useRef("");
   const contact = React.useRef("");
@@ -84,7 +90,14 @@ function AddOrder() {
 
   const componentRef = React.useRef();
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    // content: () => componentRef.current,
+    content: () => {
+      // Call your desired function here
+      handleClose();
+
+      // Return the content to be printed
+      return componentRef.current;
+    },
   });
 
   // React.useEffect(() => {
@@ -108,6 +121,10 @@ function AddOrder() {
     }
     return false;
   };
+
+  const currentDate = new Date();
+  const options = { month: "long", day: "numeric", year: "numeric" };
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
 
   const updateCurrentRow = (product) => {
     const newState = rows.map((row) => {
@@ -214,7 +231,20 @@ function AddOrder() {
     });
     setpaymentMethod("");
   };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
 
+  let newObj;
+  console.log("new obj", printData);
   const handleOrder = async () => {
     if (rows.length <= 0) return;
     if (parseInt(screenData.paidAmount) < screenData.invoiceTotal) {
@@ -250,7 +280,7 @@ function AddOrder() {
         _id: p.product._id,
       };
     });
-    const newObj = {
+    newObj = {
       name: name.current?.value || "",
       contact: contact.current?.value || "",
       totalItems: rows.length,
@@ -263,6 +293,7 @@ function AddOrder() {
       products,
       branch: branch,
     };
+    setprintData(newObj);
 
     try {
       const res = await axios.post(`/api/addorder`, {
@@ -272,7 +303,7 @@ function AddOrder() {
       if (res.data.success) {
         // setsnackbar({ msg: "Order Placed Successfully", status: "success" });
         toast.success("Order Placed Successfully");
-        handlePrint();
+        handleOpen();
         handleReset();
       }
     } catch (error) {
@@ -336,7 +367,7 @@ function AddOrder() {
         />
       </Paper>
       <AddOrderTable
-        reff={componentRef}
+        // reff={componentRef}
         rows={rows}
         invoiceSubtotal={screenData.invoiceSubtotal}
         invoiceDiscount={screenData.invoiceDiscount}
@@ -439,6 +470,190 @@ function AddOrder() {
           Place Order
         </Button>
       </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box border={"1px solid black"} ref={componentRef}>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              // flexDirection={"column-reverse"}
+            >
+              <Box flexDirection={"column"}>
+                <Box fontSize={"0.8rem"}>
+                  {printData.branch === "wapdatown"
+                    ? "Shahrah-e-Nazria, near Wapda Town , Block G Pia Housing Scheme"
+                    : "Township Branch"}
+                </Box>
+
+                {/* <Box>{printData.branch}</Box> */}
+              </Box>
+              <Box>
+                <img
+                  src="/logo.png"
+                  alt="logo"
+                  width={"100px"}
+                  height={"50%"}
+                />
+              </Box>
+            </Box>
+            <Divider />
+            <Box
+              marginY={"0.5rem"}
+              display={"flex"}
+              // alignItems={"center"}
+              flexDirection={"column"}
+              justifyContent={"space-between"}
+            >
+              <Box>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {" "}
+                  name :{" "}
+                </span>{" "}
+                {printData.name != "" ? printData.name : "customer"}
+              </Box>
+              <Box marginY={"0.5rem"}>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  contact:
+                </span>{" "}
+                {printData.contact != "" ? printData.contact : "Null"}
+              </Box>
+              <Box marginY={"0.5rem"}>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  date:
+                </span>{" "}
+                {formattedDate}
+              </Box>
+              {/* <Divider /> */}
+            </Box>
+
+            <Box
+              border={"1px solid gray"}
+              display={"flex"}
+              justifyContent={"center"}
+              gap={"5rem"}
+              paddingX={"1.5rem"}
+            >
+              <Box fontWeight={"bold"} width={"60%"}>
+                name
+              </Box>
+              <Box fontWeight={"bold"} width={"20%"}>
+                rate
+              </Box>
+              <Box marginRight={"1rem"} fontWeight={"bold"} width={"20%"}>
+                qty
+              </Box>
+            </Box>
+            <Box paddingX={"1.5rem"}>
+              {printData.products &&
+                printData.products.map((items) => {
+                  return (
+                    <Box
+                      paddingX={"0.5rem"}
+                      // border={"1px solid gray"}
+                      borderTop={"none"}
+                      display={"flex"}
+                      justifyContent={"center"}
+                      gap={"5rem"}
+                      key={items._id}
+                      paddingY={"0.5rem"}
+                    >
+                      <Box fontSize={"0.9rem"} width={"50%"}>
+                        {items.title}
+                      </Box>
+                      <Box fontSize={"0.9rem"} width={"20%"}>
+                        {items.rate}
+                      </Box>
+                      <Box
+                        fontSize={"0.9rem"}
+                        marginRight={"1rem"}
+                        width={"20%"}
+                      >
+                        {items.qty}
+                      </Box>
+                    </Box>
+                  );
+                })}
+            </Box>
+            <Divider style={{ border: "1px solid black" }} />
+            <Box
+              marginY={"1rem"}
+              // border={"1px solid black"}
+              display={"flex"}
+              flexDirection={"column"}
+              justifyContent={"right"}
+              justifyItems={"right"}
+              // alignContent={"end"}
+              alignItems={"end"}
+              marginRight={"1rem"}
+            >
+              <Box>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {" "}
+                  SubTotal :{" "}
+                </span>{" "}
+                {printData.subTotal != 0 ? printData.subTotal : 0}
+              </Box>
+              <Box>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {" "}
+                  Total :{" "}
+                </span>{" "}
+                {printData.total != 0 ? printData.total : 0}
+              </Box>
+            </Box>
+            <Divider style={{ border: "1px solid black" }} />
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap={"0.5rem"}
+              flexDirection={"column"}
+            >
+              <Box> Thanks for Shopping</Box>
+              <Box>
+                <span style={{ fontWeight: "bold" }}>Contact :</span>{" "}
+                0321-8836095
+              </Box>
+            </Box>
+          </Box>
+          <Button
+            style={{
+              marginTop: "1rem",
+            }}
+            fullWidth
+            variant="contained"
+            onClick={handlePrint}
+          >
+            Print
+          </Button>
+        </Box>
+      </Modal>
     </>
   );
 }
