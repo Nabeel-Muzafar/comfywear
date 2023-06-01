@@ -90,8 +90,8 @@ const Table = ({ data, columns }) => {
         "JPEG",
         15,
         60,
-        150,
-        150
+        180,
+        200
       );
       doc.addPage("a4", "1");
     }
