@@ -56,16 +56,16 @@ const Index = () => {
   }, [router.pathname]);
 
   const onSubmit = async (data) => {
-    if (!pic.url) {
-      return;
-    }
+    // if (!pic.url) {
+    //   return;
+    // }
     setuploading(true);
     setisLoading(true);
     try {
       const responce = await axios.post("/api/addproduct", {
         data,
         // isvariant,
-        picUrl: pic.url,
+        picUrl: pic.url === "" ? "https://via.placeholder.com/150" : pic.url,
       });
 
       if (responce.data.success) {
@@ -240,6 +240,9 @@ const Index = () => {
             justifyContent={"center"}
             alignItems={"center"}
             gap={"1rem"}
+            flexWrap={"wrap"}
+            width={"80%"}
+            marginX={"auto"}
           >
             <Box width={"20%"}>
               <FormControl fullWidth>
@@ -348,6 +351,23 @@ const Index = () => {
                   <MenuItem value="none">Select-option</MenuItem>
                   <MenuItem value="Available">Available</MenuItem>
                   <MenuItem value="out-of-stock">out-of-stock</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box width={"20%"}>
+              <FormControl fullWidth>
+                <InputLabel id="status">Product Branch</InputLabel>
+                <Select
+                  id="status"
+                  style={{ width: "70%" }}
+                  label="Select-Status"
+                  placeholder="Select-option"
+                  {...register("productBranch", { required: true })}
+                >
+                  <MenuItem value="none">Select-option</MenuItem>
+                  <MenuItem value="warehouse">warehouse</MenuItem>
+                  <MenuItem value="township">township</MenuItem>
+                  <MenuItem value="wapdatown">wapdatown</MenuItem>
                 </Select>
               </FormControl>
             </Box>

@@ -11,7 +11,7 @@ const productSchema = new mongoose.Schema({
   },
   productImage: {
     type: String,
-    default: "",
+    default: "https://via.placeholder.com/150",
   },
   quantity: {
     type: Number,
@@ -37,6 +37,10 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
+  },
+  productBranch: {
+    type: String,
+    default: "warehouse",
   },
   status: {
     type: String,

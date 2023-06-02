@@ -67,11 +67,15 @@ function AddOrder() {
   const [printData, setprintData] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [Discount, setDiscount] = React.useState(0);
+  const [DiscountPrice, setDiscountPrice] = React.useState(0);
   const [snackbar, setsnackbar] = React.useState({ msg: "", status: "" });
   const name = React.useRef("");
   const contact = React.useRef("");
 
   const products = useSelector((state) => state.product.products);
+
+  console.log("print data", printData);
 
   React.useEffect(() => {
     const invoiceSubtotal = subtotal(rows);
@@ -292,6 +296,8 @@ function AddOrder() {
       discount: screenData.invoiceDiscount,
       products,
       branch: branch,
+      discount: Discount,
+      discountPrice: DiscountPrice,
     };
     setprintData(newObj);
 
@@ -303,8 +309,8 @@ function AddOrder() {
       if (res.data.success) {
         // setsnackbar({ msg: "Order Placed Successfully", status: "success" });
         toast.success("Order Placed Successfully");
-        handleOpen();
         handleReset();
+        handleOpen();
       }
     } catch (error) {
       console.log(error);
@@ -373,6 +379,10 @@ function AddOrder() {
         invoiceDiscount={screenData.invoiceDiscount}
         invoiceTotal={screenData.invoiceTotal}
         handledeleteRow={handledeleteRow}
+        Discount2={Discount}
+        setDiscount2={setDiscount}
+        DiscountPrice2={DiscountPrice}
+        setDiscountPrice2={setDiscountPrice}
       />
       <Paper
         sx={{
@@ -420,6 +430,7 @@ function AddOrder() {
               </MenuItem>
               <MenuItem value="cash">Cash</MenuItem>
               <MenuItem value="card">Card</MenuItem>
+              <MenuItem value="COD">COD</MenuItem>
             </Select>
           </FormControl>
         </Box>
@@ -489,7 +500,7 @@ function AddOrder() {
                   {printData.branch === "wapdatown"
                     ? "Shahrah-e-Nazria, near Wapda Town , Block G Pia Housing Scheme"
                     : printData.branch === "warehouse"
-                    ? "Ware-house"
+                    ? "House # 240 A Block, Public Health Society Block A Lda Avenue"
                     : "Township Branch"}
                 </Box>
 
@@ -533,7 +544,7 @@ function AddOrder() {
                 </span>{" "}
                 {printData.contact != "" ? printData.contact : "Null"}
               </Box>
-              <Box marginY={"0.5rem"}>
+              <Box>
                 <span
                   style={{
                     fontWeight: "bold",
@@ -542,6 +553,16 @@ function AddOrder() {
                   date:
                 </span>{" "}
                 {formattedDate}
+              </Box>
+              <Box marginY={"0.5rem"}>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  payment type:
+                </span>{" "}
+                {printData.type ? printData.type : "not selected"}
               </Box>
               {/* <Divider /> */}
             </Box>
@@ -627,6 +648,29 @@ function AddOrder() {
                   Total :{" "}
                 </span>{" "}
                 {printData.total != 0 ? printData.total : 0}
+              </Box>
+
+              <Box>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {" "}
+                  Discount :{" "}
+                </span>{" "}
+                {printData.discount == "" ? 0 : printData.discount}
+              </Box>
+              <Box>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {" "}
+                  Discount price
+                </span>{" "}
+                {printData.discount == "" ? 0 : printData.discountPrice}
               </Box>
             </Box>
             <Divider style={{ border: "1px solid black" }} />
