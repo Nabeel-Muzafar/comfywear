@@ -14,6 +14,7 @@ const handler = async (req, res) => {
       category,
       status,
       size,
+      productBranch,
       // variant,
     } = req.body.data;
     const id = req.body.id;
@@ -34,6 +35,7 @@ const handler = async (req, res) => {
           category: category,
           status: status,
           size: size,
+          productBranch: productBranch,
           // variantStatus: variantStatus,
           // variant: variantStatus === "no" ? null : variant,
         }
