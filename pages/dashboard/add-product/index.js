@@ -56,18 +56,18 @@ const Index = () => {
   }, [router.pathname]);
 
   const onSubmit = async (data) => {
-    // if (!pic.url) {
-    //   return;
-    // }
+    if (!pic) {
+      return;
+    }
     setuploading(true);
     setisLoading(true);
     try {
       const responce = await axios.post("/api/addproduct", {
         data,
         // isvariant,
-        picUrl: pic.url === "" ? "https://via.placeholder.com/150" : pic.url,
+        picUrl: pic == "" ? "https://via.placeholder.com/150" : pic.url,
       });
-
+      console.log(responce.data);
       if (responce.data.success) {
         setisLoading(false);
         reset();

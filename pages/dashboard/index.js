@@ -12,7 +12,12 @@ function DashBoard() {
   const [township, settownship] = useState(0);
   const [wapda, setwapda] = useState(0);
   const [wareHouse, setwareHouse] = useState(0);
+  const [townshipProducts, settownshipProducts] = useState(0);
+  const [wapdatownProducts, setwapdatownProducts] = useState(0);
+  const [warehouseProducts, setwarehouseProducts] = useState(0);
   const router = useRouter();
+
+  console.log(products);
 
   useEffect(() => {
     setloading(true);
@@ -26,10 +31,31 @@ function DashBoard() {
   useEffect(() => {
     if (products) {
       let count = 0;
+
       for (let i = 0; i < products.length; i++) {
         count += products[i].quantity;
       }
       setquantity(count);
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (products) {
+      let count = 0;
+      let count2 = 0;
+      let count3 = 0;
+      for (let i = 0; i < products.length; i++) {
+        if (products[i].productBranch == "warehouse") {
+          count += 1;
+        } else if (products[i].productBranch == "township") {
+          count2 += 1;
+        } else {
+          count3 += 1;
+        }
+      }
+      setwarehouseProducts(count);
+      settownshipProducts(count2);
+      setwapdatownProducts(count3);
     }
   }, [products]);
 
@@ -142,6 +168,57 @@ function DashBoard() {
                   </Typography>
                   <Typography variant="h5" component="h2">
                     {wareHouse ? wareHouse : 0}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card
+                style={{
+                  backgroundColor: "#002884",
+                  color: "white",
+                }}
+              >
+                <CardContent>
+                  <Typography color="white" gutterBottom>
+                    Ware House Total Product
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {warehouseProducts ? warehouseProducts : 0}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card
+                style={{
+                  backgroundColor: "#002884",
+                  color: "white",
+                }}
+              >
+                <CardContent>
+                  <Typography color="white" gutterBottom>
+                    Township Total Product
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {townshipProducts ? townshipProducts : 0}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card
+                style={{
+                  backgroundColor: "#002884",
+                  color: "white",
+                }}
+              >
+                <CardContent>
+                  <Typography color="white" gutterBottom>
+                    Wapda Town Total Product
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {wapdatownProducts ? wapdatownProducts : 0}
                   </Typography>
                 </CardContent>
               </Card>
