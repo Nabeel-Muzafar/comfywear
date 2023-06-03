@@ -13,8 +13,15 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 function Orderdetail() {
-  const order = useSelector((state) => state.order);
+  const order = useSelector((state) => state.order.orders);
   const [orderProducts, setorderProducts] = useState([]);
+  const [allOrders, setallOrders] = useState([]);
+
+  useEffect(() => {
+    if (order) {
+      setallOrders(order);
+    }
+  }, [order]);
 
   const [loading, setloading] = useState(false);
   const router = useRouter();
@@ -115,90 +122,92 @@ function Orderdetail() {
     handleOpen();
   };
 
+  console.log(allOrders);
+
   return (
     <>
-      {order.length ? (
-        loading ? (
-          <CircularProgress />
-        ) : (
-          <>
-            <Box
-              display={"flex"}
-              justifyContent={"center"}
-              gap={"5rem"}
-              flexWrap={"wrap"}
-              py={"1.5rem"}
-            >
-              <Typography fontSize={"2rem"} fontWeight={"semibold"}>
-                Branch : {order.orders ? order.orders.branch : ""}
-              </Typography>
-              <Typography fontSize={"2rem"} fontWeight={"semibold"}>
-                Date : {order.orders ? order.orders.date : ""}
-              </Typography>
-            </Box>
-            {order ? (
-              <>
-                <Table2 data={order.orders.orders} columns={columns} />
-              </>
-            ) : null}
+      {order && order.orders ? (
+        // loading ? (
+        //   <CircularProgress />
+        // ) : (
+        <>
+          <Box
+            display={"flex"}
+            justifyContent={"center"}
+            gap={"5rem"}
+            flexWrap={"wrap"}
+            py={"1.5rem"}
+          >
+            <Typography fontSize={"2rem"} fontWeight={"semibold"}>
+              Branch : {allOrders ? allOrders.branch : "no"}
+            </Typography>
+            <Typography fontSize={"2rem"} fontWeight={"semibold"}>
+              Date : {allOrders ? allOrders.date : "yes"}
+            </Typography>
+          </Box>
+          {allOrders.orders ? (
+            <>
+              <Table2 data={allOrders.orders} columns={columns} />
+            </>
+          ) : null}
 
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 700 }} aria-label="spanning table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center" colSpan={3}>
-                          Details
-                        </TableCell>
-                        <TableCell align="right">Price</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>Desc</TableCell>
-                        <TableCell align="right">Qty.</TableCell>
-                        <TableCell align="right">Unit</TableCell>
-                        <TableCell align="right">Sum</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {orderProducts.map((row) => (
-                        <TableRow key={row.desc}>
-                          <TableCell>{row.title}</TableCell>
-                          <TableCell align="right">{row.qty}</TableCell>
-                          <TableCell align="right">{row.rate}</TableCell>
-                          <TableCell align="right">
-                            {/* {ccyFormat(row.price)} */}
-                            {row.qty * row.rate}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-
-                      <TableRow>
-                        <TableCell rowSpan={3} />
-                        <TableCell colSpan={2}>Subtotal</TableCell>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center" colSpan={3}>
+                        Details
+                      </TableCell>
+                      <TableCell align="right">Price</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Desc</TableCell>
+                      <TableCell align="right">Qty.</TableCell>
+                      <TableCell align="right">Unit</TableCell>
+                      <TableCell align="right">Sum</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {orderProducts.map((row) => (
+                      <TableRow key={row.desc}>
+                        <TableCell>{row.title}</TableCell>
+                        <TableCell align="right">{row.qty}</TableCell>
+                        <TableCell align="right">{row.rate}</TableCell>
                         <TableCell align="right">
-                          {/* {ccyFormat(invoiceSubtotal)} */}
-                          {invoiceSubtotal}
+                          {/* {ccyFormat(row.price)} */}
+                          {row.qty * row.rate}
                         </TableCell>
                       </TableRow>
+                    ))}
 
-                      <TableRow>
-                        <TableCell colSpan={2}>Total</TableCell>
-                        <TableCell align="right">{invoiceSubtotal}</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
-            </Modal>
-          </>
-        )
+                    <TableRow>
+                      <TableCell rowSpan={3} />
+                      <TableCell colSpan={2}>Subtotal</TableCell>
+                      <TableCell align="right">
+                        {/* {ccyFormat(invoiceSubtotal)} */}
+                        {invoiceSubtotal}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                      <TableCell colSpan={2}>Total</TableCell>
+                      <TableCell align="right">{invoiceSubtotal}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Modal>
+        </>
       ) : (
+        // )
         ""
       )}
     </>
