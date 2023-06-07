@@ -90,7 +90,7 @@ export default function Allproduct() {
     },
     {
       accessorKey: "rate",
-      header: "Price",
+      header: "Sale Price",
       // size: 300,
     },
     {
