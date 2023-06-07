@@ -70,12 +70,13 @@ function AddOrder() {
   const [Discount, setDiscount] = React.useState(0);
   const [DiscountPrice, setDiscountPrice] = React.useState(0);
   const [snackbar, setsnackbar] = React.useState({ msg: "", status: "" });
+  const [message, setmessage] = React.useState('')
   const name = React.useRef("");
   const contact = React.useRef("");
 
   const products = useSelector((state) => state.product.products);
 
-  console.log("print data", printData);
+  
 
   React.useEffect(() => {
     const invoiceSubtotal = subtotal(rows);
@@ -298,6 +299,7 @@ function AddOrder() {
       branch: branch,
       discount: Discount,
       discountPrice: DiscountPrice,
+      mesage:message
     };
     setprintData(newObj);
 
@@ -320,6 +322,8 @@ function AddOrder() {
 
     setapiLoading(false);
   };
+
+  
 
   const handleAutoCompleteChange = (e, value) => {
     if (!value) return;
@@ -372,6 +376,7 @@ function AddOrder() {
           blurOnSelect
         />
       </Paper>
+      
       <AddOrderTable
         // reff={componentRef}
         rows={rows}
@@ -383,7 +388,10 @@ function AddOrder() {
         setDiscount2={setDiscount}
         DiscountPrice2={DiscountPrice}
         setDiscountPrice2={setDiscountPrice}
+        setMessage={setmessage}
       />
+      
+        
       <Paper
         sx={{
           marginTop: "20px",
@@ -477,6 +485,7 @@ function AddOrder() {
         >
           Reset
         </Button>
+        
         <Button variant="contained" size="large" onClick={handleOrder}>
           Place Order
         </Button>

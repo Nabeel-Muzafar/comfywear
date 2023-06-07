@@ -14,7 +14,7 @@ const handler = async (req, res, client) => {
     //     success: false,
     //     payload: { message: "user not found" },
     //   });
-    const { totalItems, products, date } = req.body.newObj;
+    const { totalItems, products, date ,mesage } = req.body.newObj;
     const { branch, ...order } = req.body.newObj;
 
     const session = client.startSession();

@@ -18,6 +18,7 @@ function AddOrderTable({
   setDiscount2,
   DiscountPrice2,
   setDiscountPrice2,
+  setMessage
 }) {
   const ccyFormat = (num) => {
     return `${num.toFixed(2)}`;
@@ -36,6 +37,7 @@ function AddOrderTable({
 
   return (
     <>
+    <Box display={'flex'} flexDirection={'column'} >
       <TableContainer
         // ref={reff}
         component={Paper}
@@ -95,15 +97,17 @@ function AddOrderTable({
       <Box
         // width={"80%"}
         // mx={"auto"}
+        
         marginY={"1.5rem"}
         marginLeft={"1rem"}
         display={"flex"}
-        flexDirection={"column"}
-        // justifyContent={"space-between"}
+        // flexDirection={"column"}
+        justifyContent={"space-between"}
         // alignItems={"center"}
         // alignContent={"center"}
         gap={"1rem"}
       >
+        <Box>
         <Box gap={"2rem"} display={"flex"}>
           <Button size="sm" variant="outlined">
             Discount
@@ -116,7 +120,7 @@ function AddOrderTable({
             type="number"
           />
         </Box>
-        <Box gap={"2rem"} display={"flex"}>
+        <Box my='1rem' gap={"2rem"} display={"flex"}>
           <Button variant="outlined">Discount Price</Button>
           <TextField
             disabled
@@ -124,9 +128,25 @@ function AddOrderTable({
             // id="outlined-basic"
             // label="price after discount "
             variant="outlined"
+            
             // type="number"
           />
         </Box>
+        </Box>
+        <TextField
+          id="outlined-multiline-static"
+          label="Message"
+          style={{
+            marginRight:'2rem',
+            width:'30%'
+          }}
+          onChange={(e)=>setMessage(e.target.value)}
+          multiline
+          fullWidth 
+          rows={5}
+          defaultValue=""
+        />
+      </Box>
       </Box>
     </>
   );

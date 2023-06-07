@@ -100,6 +100,16 @@ function Orderdetail() {
       header: "Sub Total",
       size: 120,
     },
+    {
+      accessorKey: "type",
+      header: "Payment Type",
+      size: 120,
+    },
+    {
+      accessorKey: "mesage",
+      header: "Message",
+      size: 120,
+    },
 
     {
       accessorKey: "total",

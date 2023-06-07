@@ -18,6 +18,7 @@ const handler = async (req, res) => {
       status,
       size,
       productBranch,
+      ActualPrice
 
       // variant,
     } = req.body.data;
@@ -32,6 +33,7 @@ const handler = async (req, res) => {
         productImage: picture,
         quantity: quantity,
         rate: Price,
+        actualRate:ActualPrice,
         discount: discount,
         brand: brand,
         stuff: stuff,

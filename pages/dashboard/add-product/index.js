@@ -223,9 +223,15 @@ const Index = () => {
             />
             <TextField
               type="number"
-              placeholder="Rate"
+              placeholder="Buy Price"
+              {...register("ActualPrice", { required: true })}
+            />
+            <TextField
+              type="number"
+              placeholder="Sale Price"
               {...register("Price", { required: true })}
             />
+            
             <TextField
               type="number"
               placeholder="Discount in %"

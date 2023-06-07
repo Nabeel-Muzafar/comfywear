@@ -60,6 +60,7 @@ const Index = () => {
     setValue("category", products.category);
     setValue("status", products.status);
     setValue("productBranch", products.productBranch);
+    setValue("ActualPrice" , products.actualRate);
   }, [setValue, products]);
 
   const onSubmit = async (data) => {
@@ -126,9 +127,15 @@ const Index = () => {
             />
             <TextField
               type="number"
-              placeholder="Rate"
+              placeholder="Buy Price"
+              {...register("ActualPrice", { required: true })}
+            />
+            <TextField
+              type="number"
+              placeholder="Sale Price"
               {...register("Price", { required: true })}
             />
+             
             <TextField
               type="number"
               placeholder="Discount in %"
