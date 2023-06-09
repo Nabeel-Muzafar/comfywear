@@ -21,6 +21,7 @@ import {
   Select,
   TextField,
   Typography,
+  createFilterOptions,
 } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -73,6 +74,7 @@ function AddOrder() {
   const [message, setmessage] = React.useState('')
   const name = React.useRef("");
   const contact = React.useRef("");
+  const [totalQuantity, settotalQuantity] = React.useState(0)
 
   const products = useSelector((state) => state.product.products);
 
@@ -285,6 +287,14 @@ function AddOrder() {
         _id: p.product._id,
       };
     });
+
+let totalQuantity=0
+    products.map(items=>{
+      totalQuantity += items.qty
+    })
+    settotalQuantity(totalQuantity)
+
+
     newObj = {
       name: name.current?.value || "",
       contact: contact.current?.value || "",
@@ -299,9 +309,12 @@ function AddOrder() {
       branch: branch,
       discount: Discount,
       discountPrice: DiscountPrice,
-      mesage:message
+      mesage:message,
+      totalProductQuantity:totalQuantity
     };
     setprintData(newObj);
+
+    console.log('submit data' , newObj)
 
     try {
       const res = await axios.post(`/api/addorder`, {
@@ -332,6 +345,21 @@ function AddOrder() {
     setSelectedProduct(null);
   };
 
+  const filterOptions = createFilterOptions({
+    matchFrom: 'start',
+    stringify: (option) => `${option.productTitle} ${option.productCode}`,
+  });
+
+
+  const updateQuantity = (index, newQty) => {
+    const updatedRows = rows.map((row, rowIndex) => {
+      if (rowIndex === index) {
+        return { ...row, qty: newQty };
+      }
+      return row;
+    });
+    setrows(updatedRows);
+  };
   return (
     <>
       {apiLoading && <Backdroploading />}
@@ -374,11 +402,25 @@ function AddOrder() {
           onChange={handleAutoCompleteChange}
           value={selectedProduct}
           blurOnSelect
+          filterOptions={(options, state) => {
+            const inputValue = state.inputValue.trim().toLowerCase();
+            if (inputValue === '') {
+              return options;
+            }
+            return options.filter((option) => {
+              console.log('options' , option , inputValue)
+              const label = `${option.productCode}`;
+              console.log(label == inputValue)
+              return  label == inputValue
+            });
+          }}
+          
         />
       </Paper>
       
       <AddOrderTable
         // reff={componentRef}
+        updateQuantity={updateQuantity}
         rows={rows}
         invoiceSubtotal={screenData.invoiceSubtotal}
         invoiceDiscount={screenData.invoiceDiscount}
@@ -389,6 +431,7 @@ function AddOrder() {
         DiscountPrice2={DiscountPrice}
         setDiscountPrice2={setDiscountPrice}
         setMessage={setmessage}
+        
       />
       
         
@@ -636,6 +679,18 @@ function AddOrder() {
               alignItems={"end"}
               marginRight={"1rem"}
             >
+              <Box display={'flex'} justifyContent={'space-between'}  width={'100%'}>
+               <Box>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {" "}
+                  Total Items :{" "}
+                </span>{" "}
+                {printData.totalItems != 0 ? printData.totalItems : 0}
+              </Box>
               <Box>
                 <span
                   style={{
@@ -647,6 +702,19 @@ function AddOrder() {
                 </span>{" "}
                 {printData.subTotal != 0 ? printData.subTotal : 0}
               </Box>
+              </Box>
+              <Box display={'flex'} justifyContent={'space-between'}  width={'100%'}>
+              <Box>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {" "}
+                  Total qty:{" "}
+                </span>{" "}
+                {totalQuantity != 0 ? totalQuantity :  0}
+              </Box>
               <Box>
                 <span
                   style={{
@@ -657,6 +725,7 @@ function AddOrder() {
                   Total :{" "}
                 </span>{" "}
                 {printData.total != 0 ? printData.total : 0}
+              </Box>
               </Box>
 
               <Box>

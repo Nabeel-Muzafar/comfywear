@@ -18,8 +18,11 @@ function AddOrderTable({
   setDiscount2,
   DiscountPrice2,
   setDiscountPrice2,
-  setMessage
+  setMessage,
+  updateQuantity
 }) {
+
+ 
   const ccyFormat = (num) => {
     return `${num.toFixed(2)}`;
   };
@@ -34,6 +37,15 @@ function AddOrderTable({
       setDiscountPrice2(0);
     }
   }, [Discount2]);
+
+  const handleQtyChange = (e, index) => {
+    const newQty = parseInt(e.target.value);
+    if (newQty >= 1) {
+      updateQuantity(index, newQty); // Call updateQuantity function
+    }
+  };
+
+  
 
   return (
     <>
@@ -60,7 +72,16 @@ function AddOrderTable({
               <TableRow key={row.code}>
                 <TableCell>{row.code}</TableCell>
                 <TableCell>{row.desc}</TableCell>
-                <TableCell align="right">{row.qty}</TableCell>
+                {/* <TableCell align="right">{row.qty}</TableCell> */}
+                <TableCell align="right">
+                <TextField
+    type="number"
+    value={row.qty}
+    onChange={(e) => handleQtyChange(e, i)} // Pass the index to handleQtyChange
+    inputProps={{ min: 1 }}
+    // fullWidth
+  />
+      </TableCell>
                 <TableCell align="right">{row.unit}</TableCell>
                 <TableCell align="right">{`${row.discount}%`}</TableCell>
                 <TableCell align="right">{ccyFormat(row.price)}</TableCell>
