@@ -28,6 +28,7 @@ function Navbar() {
     { name: "Orders", link: "addorder" },
     { name: "All Orders", link: "allorders" },
     { name: "Invoice", link: "invoice" },
+    // { name: "Report", link: "report" },
   ]);
 
   let user;

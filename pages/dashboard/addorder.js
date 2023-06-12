@@ -71,14 +71,12 @@ function AddOrder() {
   const [Discount, setDiscount] = React.useState(0);
   const [DiscountPrice, setDiscountPrice] = React.useState(0);
   const [snackbar, setsnackbar] = React.useState({ msg: "", status: "" });
-  const [message, setmessage] = React.useState('')
+  const [message, setmessage] = React.useState("");
   const name = React.useRef("");
   const contact = React.useRef("");
-  const [totalQuantity, settotalQuantity] = React.useState(0)
+  const [totalQuantity, settotalQuantity] = React.useState(0);
 
   const products = useSelector((state) => state.product.products);
-
-  
 
   React.useEffect(() => {
     const invoiceSubtotal = subtotal(rows);
@@ -288,12 +286,11 @@ function AddOrder() {
       };
     });
 
-let totalQuantity=0
-    products.map(items=>{
-      totalQuantity += items.qty
-    })
-    settotalQuantity(totalQuantity)
-
+    let totalQuantity = 0;
+    products.map((items) => {
+      totalQuantity += items.qty;
+    });
+    settotalQuantity(totalQuantity);
 
     newObj = {
       name: name.current?.value || "",
@@ -309,12 +306,10 @@ let totalQuantity=0
       branch: branch,
       discount: Discount,
       discountPrice: DiscountPrice,
-      mesage:message,
-      totalProductQuantity:totalQuantity
+      mesage: message,
+      totalProductQuantity: totalQuantity,
     };
     setprintData(newObj);
-
-    console.log('submit data' , newObj)
 
     try {
       const res = await axios.post(`/api/addorder`, {
@@ -336,8 +331,6 @@ let totalQuantity=0
     setapiLoading(false);
   };
 
-  
-
   const handleAutoCompleteChange = (e, value) => {
     if (!value) return;
     setSelectedProduct(value);
@@ -346,10 +339,9 @@ let totalQuantity=0
   };
 
   const filterOptions = createFilterOptions({
-    matchFrom: 'start',
+    matchFrom: "start",
     stringify: (option) => `${option.productTitle} ${option.productCode}`,
   });
-
 
   const updateQuantity = (index, newQty) => {
     const updatedRows = rows.map((row, rowIndex) => {
@@ -403,21 +395,21 @@ let totalQuantity=0
           value={selectedProduct}
           blurOnSelect
           filterOptions={(options, state) => {
-            const inputValue = state.inputValue.trim().toLowerCase();
-            if (inputValue === '') {
+            // const inputValue = state.inputValue.trim().toLowerCase();
+            const inputValue = state.inputValue;
+            if (inputValue === "") {
               return options;
             }
             return options.filter((option) => {
-              console.log('options' , option , inputValue)
+              // console.log("options", option, inputValue);
               const label = `${option.productCode}`;
-              console.log(label == inputValue)
-              return  label == inputValue
+
+              return label == inputValue;
             });
           }}
-          
         />
       </Paper>
-      
+
       <AddOrderTable
         // reff={componentRef}
         updateQuantity={updateQuantity}
@@ -431,10 +423,8 @@ let totalQuantity=0
         DiscountPrice2={DiscountPrice}
         setDiscountPrice2={setDiscountPrice}
         setMessage={setmessage}
-        
       />
-      
-        
+
       <Paper
         sx={{
           marginTop: "20px",
@@ -528,7 +518,7 @@ let totalQuantity=0
         >
           Reset
         </Button>
-        
+
         <Button variant="contained" size="large" onClick={handleOrder}>
           Place Order
         </Button>
@@ -679,53 +669,61 @@ let totalQuantity=0
               alignItems={"end"}
               marginRight={"1rem"}
             >
-              <Box display={'flex'} justifyContent={'space-between'}  width={'100%'}>
-               <Box>
-                <span
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {" "}
-                  Total Items :{" "}
-                </span>{" "}
-                {printData.totalItems != 0 ? printData.totalItems : 0}
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                width={"100%"}
+              >
+                <Box>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {" "}
+                    Total Items :{" "}
+                  </span>{" "}
+                  {printData.totalItems != 0 ? printData.totalItems : 0}
+                </Box>
+                <Box>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {" "}
+                    SubTotal :{" "}
+                  </span>{" "}
+                  {printData.subTotal != 0 ? printData.subTotal : 0}
+                </Box>
               </Box>
-              <Box>
-                <span
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {" "}
-                  SubTotal :{" "}
-                </span>{" "}
-                {printData.subTotal != 0 ? printData.subTotal : 0}
-              </Box>
-              </Box>
-              <Box display={'flex'} justifyContent={'space-between'}  width={'100%'}>
-              <Box>
-                <span
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {" "}
-                  Total qty:{" "}
-                </span>{" "}
-                {totalQuantity != 0 ? totalQuantity :  0}
-              </Box>
-              <Box>
-                <span
-                  style={{
-                    fontWeight: "bold",
-                  }}
-                >
-                  {" "}
-                  Total :{" "}
-                </span>{" "}
-                {printData.total != 0 ? printData.total : 0}
-              </Box>
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                width={"100%"}
+              >
+                <Box>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {" "}
+                    Total qty:{" "}
+                  </span>{" "}
+                  {totalQuantity != 0 ? totalQuantity : 0}
+                </Box>
+                <Box>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {" "}
+                    Total :{" "}
+                  </span>{" "}
+                  {printData.total != 0 ? printData.total : 0}
+                </Box>
               </Box>
 
               <Box>
