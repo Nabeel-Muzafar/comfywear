@@ -147,6 +147,22 @@ function AddOrder() {
     });
     setrows(newState);
   };
+
+  const updateProductPrice = (index, newQty) => {
+    const updatedRows = rows.map((row, rowIndex) => {
+      if (rowIndex === index) {
+        const unit = row.product.rate; // Use the appropriate field for the unit price
+        const price = priceRow(newQty, unit);
+        return {
+          ...row,
+          qty: newQty,
+          price: price,
+        };
+      }
+      return row;
+    });
+    setrows(updatedRows);
+  };
   const getProduct = (barcode) => {
     for (let i = 0; i < products.length; i++) {
       if (products[i].productCode === barcode) {
@@ -338,11 +354,6 @@ function AddOrder() {
     setSelectedProduct(null);
   };
 
-  const filterOptions = createFilterOptions({
-    matchFrom: "start",
-    stringify: (option) => `${option.productTitle} ${option.productCode}`,
-  });
-
   const updateQuantity = (index, newQty) => {
     const updatedRows = rows.map((row, rowIndex) => {
       if (rowIndex === index) {
@@ -411,7 +422,10 @@ function AddOrder() {
       </Paper>
 
       <AddOrderTable
+        getProduct={getProduct}
+        handleProduct={handleAppendInTable}
         // reff={componentRef}
+        updateProductPrice={updateProductPrice}
         updateQuantity={updateQuantity}
         rows={rows}
         invoiceSubtotal={screenData.invoiceSubtotal}

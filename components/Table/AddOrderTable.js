@@ -19,10 +19,11 @@ function AddOrderTable({
   DiscountPrice2,
   setDiscountPrice2,
   setMessage,
-  updateQuantity
+  updateQuantity,
+  getProduct,
+  updateProductPrice,
+  handleProduct,
 }) {
-
- 
   const ccyFormat = (num) => {
     return `${num.toFixed(2)}`;
   };
@@ -38,136 +39,141 @@ function AddOrderTable({
     }
   }, [Discount2]);
 
-  const handleQtyChange = (e, index) => {
+  const handleQtyChange = (e, index, key) => {
+    console.log(key);
     const newQty = parseInt(e.target.value);
     if (newQty >= 1) {
-      updateQuantity(index, newQty); // Call updateQuantity function
+      // updateQuantity(index, newQty); // Call updateQuantity function
+      // let pro = getProduct(key);
+      // handleProduct(pro);
+      updateQuantity(index, newQty);
+      updateProductPrice(index, newQty);
     }
   };
 
-  
-
   return (
     <>
-    <Box display={'flex'} flexDirection={'column'} >
-      <TableContainer
-        // ref={reff}
-        component={Paper}
-        sx={{ width: "97%", mx: "auto", marginTop: "20px" }}
-      >
-        <Table sx={{ minWidth: 700 }} aria-label="spanning table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Code</TableCell>
-              <TableCell>Desc</TableCell>
-              <TableCell align="right">Qty.</TableCell>
-              <TableCell align="right">Unit</TableCell>
-              <TableCell align="right">discount</TableCell>
-              <TableCell align="right">Sum</TableCell>
-              <TableCell align="right">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row, i) => (
-              <TableRow key={row.code}>
-                <TableCell>{row.code}</TableCell>
-                <TableCell>{row.desc}</TableCell>
-                {/* <TableCell align="right">{row.qty}</TableCell> */}
+      <Box display={"flex"} flexDirection={"column"}>
+        <TableContainer
+          // ref={reff}
+          component={Paper}
+          sx={{ width: "97%", mx: "auto", marginTop: "20px" }}
+        >
+          <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Code</TableCell>
+                <TableCell>Desc</TableCell>
+                <TableCell align="right">Qty.</TableCell>
+                <TableCell align="right">Unit</TableCell>
+                <TableCell align="right">discount</TableCell>
+                <TableCell align="right">Sum</TableCell>
+                <TableCell align="right">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row, i) => (
+                <TableRow key={row.code}>
+                  <TableCell>{row.code}</TableCell>
+                  <TableCell>{row.desc}</TableCell>
+                  {/* <TableCell align="right">{row.qty}</TableCell> */}
+                  <TableCell align="right">
+                    <TextField
+                      type="number"
+                      value={row.qty}
+                      onChange={(e) => handleQtyChange(e, i, row.code)} // Pass the index to handleQtyChange
+                      inputProps={{ min: 1 }}
+                      // fullWidth
+                    />
+                  </TableCell>
+                  <TableCell align="right">{row.unit}</TableCell>
+                  <TableCell align="right">{`${row.discount}%`}</TableCell>
+                  <TableCell align="right">{ccyFormat(row.price)}</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={() => handledeleteRow(i)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+
+              <TableRow>
+                {/* <TableCell rowSpan={3} /> */}
+                <TableCell colSpan={2}>Subtotal</TableCell>
                 <TableCell align="right">
-                <TextField
-    type="number"
-    value={row.qty}
-    onChange={(e) => handleQtyChange(e, i)} // Pass the index to handleQtyChange
-    inputProps={{ min: 1 }}
-    // fullWidth
-  />
-      </TableCell>
-                <TableCell align="right">{row.unit}</TableCell>
-                <TableCell align="right">{`${row.discount}%`}</TableCell>
-                <TableCell align="right">{ccyFormat(row.price)}</TableCell>
-                <TableCell align="right">
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={() => handledeleteRow(i)}
-                  >
-                    Delete
-                  </Button>
+                  {ccyFormat(invoiceSubtotal)}
                 </TableCell>
               </TableRow>
-            ))}
+              <TableRow>
+                <TableCell colSpan={2}>Discount</TableCell>
 
-            <TableRow>
-              {/* <TableCell rowSpan={3} /> */}
-              <TableCell colSpan={2}>Subtotal</TableCell>
-              <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={2}>Discount</TableCell>
+                <TableCell align="right">{`${invoiceDiscount}%`}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={2}>Total</TableCell>
+                <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {/* DiscountPrice */}
+        <Box
+          // width={"80%"}
+          // mx={"auto"}
 
-              <TableCell align="right">{`${invoiceDiscount}%`}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={2}>Total</TableCell>
-              <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {/* DiscountPrice */}
-      <Box
-        // width={"80%"}
-        // mx={"auto"}
-        
-        marginY={"1.5rem"}
-        marginLeft={"1rem"}
-        display={"flex"}
-        // flexDirection={"column"}
-        justifyContent={"space-between"}
-        // alignItems={"center"}
-        // alignContent={"center"}
-        gap={"1rem"}
-      >
-        <Box>
-        <Box gap={"2rem"} display={"flex"}>
-          <Button size="sm" variant="outlined">
-            Discount
-          </Button>
+          marginY={"1.5rem"}
+          marginLeft={"1rem"}
+          display={"flex"}
+          // flexDirection={"column"}
+          justifyContent={"space-between"}
+          // alignItems={"center"}
+          // alignContent={"center"}
+          gap={"1rem"}
+        >
+          <Box>
+            <Box gap={"2rem"} display={"flex"}>
+              <Button size="sm" variant="outlined">
+                Discount
+              </Button>
+              <TextField
+                onChange={(e) => setDiscount2(e.target.value)}
+                id="outlined-basic"
+                label="discount %"
+                variant="outlined"
+                type="number"
+              />
+            </Box>
+            <Box my="1rem" gap={"2rem"} display={"flex"}>
+              <Button variant="outlined">Discount Price</Button>
+              <TextField
+                disabled
+                value={DiscountPrice2}
+                // id="outlined-basic"
+                // label="price after discount "
+                variant="outlined"
+
+                // type="number"
+              />
+            </Box>
+          </Box>
           <TextField
-            onChange={(e) => setDiscount2(e.target.value)}
-            id="outlined-basic"
-            label="discount %"
-            variant="outlined"
-            type="number"
+            id="outlined-multiline-static"
+            label="Message"
+            style={{
+              marginRight: "2rem",
+              width: "30%",
+            }}
+            onChange={(e) => setMessage(e.target.value)}
+            multiline
+            fullWidth
+            rows={5}
+            defaultValue=""
           />
         </Box>
-        <Box my='1rem' gap={"2rem"} display={"flex"}>
-          <Button variant="outlined">Discount Price</Button>
-          <TextField
-            disabled
-            value={DiscountPrice2}
-            // id="outlined-basic"
-            // label="price after discount "
-            variant="outlined"
-            
-            // type="number"
-          />
-        </Box>
-        </Box>
-        <TextField
-          id="outlined-multiline-static"
-          label="Message"
-          style={{
-            marginRight:'2rem',
-            width:'30%'
-          }}
-          onChange={(e)=>setMessage(e.target.value)}
-          multiline
-          fullWidth 
-          rows={5}
-          defaultValue=""
-        />
-      </Box>
       </Box>
     </>
   );
