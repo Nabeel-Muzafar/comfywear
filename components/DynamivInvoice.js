@@ -219,7 +219,7 @@ export const DynamivInvoice = () => {
                 }}
                 value={`
 ComfyWear 
-House # 240 A Block, Public Health Society Block A Lda Avenue,
+House # 240 A Block, Public Health Society Block A Lda 1 Avenue,
 Lahore,
 0321 8836095
                 `}
