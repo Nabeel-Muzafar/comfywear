@@ -98,27 +98,14 @@ function AddOrder() {
     // content: () => componentRef.current,
     content: () => {
       // Call your desired function here
+      setDiscount(0);
+      setDiscountPrice(0);
       handleClose();
 
       // Return the content to be printed
       return componentRef.current;
     },
   });
-
-  // React.useEffect(() => {
-  //   if (snackbar.msg) openSnackBar();
-  // }, [snackbar]);
-  // const openSnackBar = () => {
-  //   setOpen(true);
-  // };
-
-  // const closeSnackBar = (event, reason) => {
-  //   if (reason === "clickaway") {
-  //     return;
-  //   }
-
-  //   setOpen(false);
-  // };
 
   const alreadyExistsInRow = (code) => {
     for (let i = 0; i < rows.length; i++) {
@@ -251,6 +238,8 @@ function AddOrder() {
       paidAmount: "",
     });
     setpaymentMethod("");
+    setDiscount(0);
+    setDiscountPrice(0);
   };
   const style = {
     position: "absolute",
@@ -292,11 +281,13 @@ function AddOrder() {
     setapiLoading(true);
 
     const products = rows.map((p) => {
+      // console.log(p)
       return {
         title: p.product.productTitle,
         code: p.product.productCode,
         rate: p.product.rate,
-        salePrice: p.product.salePrice,
+        discountPercent: p.discount,
+        discountPrice: p.price,
         qty: p.qty,
         _id: p.product._id,
       };
@@ -333,14 +324,14 @@ function AddOrder() {
       });
 
       if (res.data.success) {
-        // setsnackbar({ msg: "Order Placed Successfully", status: "success" });
-        toast.success("Order Placed Successfully");
-        handleReset();
-        handleOpen();
+
+      toast.success("Order Placed Successfully");
+      handleReset();
+      // console.log(printData);
+      handleOpen();
       }
     } catch (error) {
       console.log(error);
-      // setsnackbar({ msg: "Error: Order Failed", status: "error" });
       toast.error("Error: Order Failed");
     }
 
@@ -366,22 +357,7 @@ function AddOrder() {
   return (
     <>
       {apiLoading && <Backdroploading />}
-      {/* <Snackbar open={open} autoHideDuration={6000} onClose={closeSnackBar}>
-        <Alert
-          onClose={closeSnackBar}
-          severity={snackbar.status}
-          sx={{ width: "100%" }}
-        >
-          {snackbar.msg}
-        </Alert>
-      </Snackbar>
-      <AddOrderTable
-        rows={rows}
-        invoiceSubtotal={screenData.invoiceSubtotal}
-        invoiceDiscount={screenData.invoiceDiscount}
-        invoiceTotal={screenData.invoiceTotal}
-        handledeleteRow={handledeleteRow}
-      /> */}
+
       <ToastContainer theme="colored" />
       <Paper
         sx={{
@@ -566,8 +542,8 @@ function AddOrder() {
                 <img
                   src="/logo.png"
                   alt="logo"
-                  width={"100px"}
-                  height={"50%"}
+                  width={"150px"}
+                  // height={"50%"}
                 />
               </Box>
             </Box>
@@ -586,7 +562,7 @@ function AddOrder() {
                   }}
                 >
                   {" "}
-                  name :{" "}
+                  Name :{" "}
                 </span>{" "}
                 {printData.name != "" ? printData.name : "customer"}
               </Box>
@@ -596,7 +572,7 @@ function AddOrder() {
                     fontWeight: "bold",
                   }}
                 >
-                  contact:
+                  Contact:
                 </span>{" "}
                 {printData.contact != "" ? printData.contact : "Null"}
               </Box>
@@ -606,7 +582,7 @@ function AddOrder() {
                     fontWeight: "bold",
                   }}
                 >
-                  date:
+                  Date:
                 </span>{" "}
                 {formattedDate}
               </Box>
@@ -616,61 +592,45 @@ function AddOrder() {
                     fontWeight: "bold",
                   }}
                 >
-                  payment type:
+                  Payment type:
                 </span>{" "}
                 {printData.type ? printData.type : "not selected"}
               </Box>
               {/* <Divider /> */}
             </Box>
 
-            <Box
-              border={"1px solid gray"}
-              display={"flex"}
-              justifyContent={"center"}
-              gap={"5rem"}
-              paddingX={"1.5rem"}
-            >
-              <Box fontWeight={"bold"} width={"60%"}>
-                name
-              </Box>
-              <Box fontWeight={"bold"} width={"20%"}>
-                rate
-              </Box>
-              <Box marginRight={"1rem"} fontWeight={"bold"} width={"20%"}>
-                qty
-              </Box>
-            </Box>
-            <Box paddingX={"1.5rem"}>
-              {printData.products &&
-                printData.products.map((items) => {
-                  return (
-                    <Box
-                      paddingX={"0.5rem"}
-                      // border={"1px solid gray"}
-                      borderTop={"none"}
-                      display={"flex"}
-                      justifyContent={"center"}
-                      gap={"5rem"}
-                      key={items._id}
-                      paddingY={"0.5rem"}
-                    >
-                      <Box fontSize={"0.9rem"} width={"50%"}>
-                        {items.title}
-                      </Box>
-                      <Box fontSize={"0.9rem"} width={"20%"}>
-                        {items.rate}
-                      </Box>
-                      <Box
-                        fontSize={"0.9rem"}
-                        marginRight={"1rem"}
-                        width={"20%"}
-                      >
-                        {items.qty}
-                      </Box>
-                    </Box>
-                  );
-                })}
-            </Box>
+            <TableContainer component={Paper}>
+              <Table aria-label="simple table">
+                <TableHead>
+                  <TableRow sx={{ border: "1px solid gray" }}>
+                    <TableCell align="left">Name</TableCell>
+                    <TableCell align="right">Qty</TableCell>
+                    <TableCell align="right">Rate</TableCell>
+                    <TableCell align="right">Dis%</TableCell>
+                    <TableCell align="right">Price</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {printData.products &&
+                    printData.products.map((items) => {
+                      return (
+                        <TableRow borderTop={"none"} key={items._id}>
+                          <TableCell align="left">{items.title}</TableCell>
+                          <TableCell align="right">{items.qty}</TableCell>
+                          <TableCell align="right">{items.rate}</TableCell>
+                          <TableCell align="right">{items.discountPercent}</TableCell>
+                          <TableCell align="right">
+                            {" "}
+                            {items.discountPercent > 0 ?
+                              `${items.discountPrice}` : items.qty * items.rate}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
             <Divider style={{ border: "1px solid black" }} />
             <Box
               marginY={"1rem"}
@@ -727,6 +687,7 @@ function AddOrder() {
                   </span>{" "}
                   {totalQuantity != 0 ? totalQuantity : 0}
                 </Box>
+                
                 <Box>
                   <span
                     style={{
@@ -734,14 +695,33 @@ function AddOrder() {
                     }}
                   >
                     {" "}
-                    Total :{" "}
+                    Discount price :{" "}
                   </span>{" "}
-                  {printData.total != 0 ? printData.total : 0}
+                  {printData.discount == "" ? 0 : printData.discountPrice}
                 </Box>
               </Box>
 
+              <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              width={"100%"}
+              >
               <Box>
-                <span
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {" "}
+                    Paid  :{" "}
+                  </span>{" "}
+                  {printData.paid != 0 ? printData.paid : 0}
+                </Box>
+              
+
+              <Box>
+                
+                {/* <span
                   style={{
                     fontWeight: "bold",
                   }}
@@ -749,8 +729,10 @@ function AddOrder() {
                   {" "}
                   Discount :{" "}
                 </span>{" "}
-                {printData.discount == "" ? 0 : printData.discount}
+                {printData.discount == "" ? 0 : printData.discount} */}
               </Box>
+              </Box>
+              <Divider sx={{width:'100%', mx:'auto', border:'1px solid black'}} />
               <Box>
                 <span
                   style={{
@@ -758,9 +740,10 @@ function AddOrder() {
                   }}
                 >
                   {" "}
-                  Discount price
+                Total : 
                 </span>{" "}
-                {printData.discount == "" ? 0 : printData.discountPrice}
+                
+                {printData.total != 0 ? printData.total : 0}
               </Box>
             </Box>
             <Divider style={{ border: "1px solid black" }} />
@@ -775,6 +758,10 @@ function AddOrder() {
               <Box>
                 <span style={{ fontWeight: "bold" }}>Contact :</span>{" "}
                 0321-8836095
+              </Box>
+              <Box>
+                {/* <span style={{ fontWeight: "bold" }}>Contact :</span>{" "} */}
+                No Return - Exchange within 3 day
               </Box>
             </Box>
           </Box>

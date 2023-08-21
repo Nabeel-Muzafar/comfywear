@@ -78,13 +78,16 @@ function AddOrderTable({
                   <TableCell>{row.desc}</TableCell>
                   {/* <TableCell align="right">{row.qty}</TableCell> */}
                   <TableCell align="right">
-                    <TextField
+                    {/* <TextField
                       type="number"
                       value={row.qty}
                       onChange={(e) => handleQtyChange(e, i, row.code)} // Pass the index to handleQtyChange
                       inputProps={{ min: 1 }}
                       // fullWidth
-                    />
+                    /> */}
+                    {
+                      row.qty
+                    }
                   </TableCell>
                   <TableCell align="right">{row.unit}</TableCell>
                   <TableCell align="right">{`${row.discount}%`}</TableCell>
