@@ -294,8 +294,10 @@ function AddOrder() {
     });
 
     let totalQuantity = 0;
+    let actualRate = 0
     products.map((items) => {
       totalQuantity += items.qty;
+      actualRate += items.rate;
     });
     settotalQuantity(totalQuantity);
 
@@ -314,6 +316,7 @@ function AddOrder() {
       discount: Discount,
       discountPrice: DiscountPrice,
       mesage: message,
+      actualProductRate: actualRate,
       totalProductQuantity: totalQuantity,
     };
     setprintData(newObj);
@@ -327,7 +330,6 @@ function AddOrder() {
 
       toast.success("Order Placed Successfully");
       handleReset();
-      // console.log(printData);
       handleOpen();
       }
     } catch (error) {
@@ -666,9 +668,9 @@ function AddOrder() {
                     }}
                   >
                     {" "}
-                    SubTotal :{" "}
+                    Original price :{" "}
                   </span>{" "}
-                  {printData.subTotal != 0 ? printData.subTotal : 0}
+                  {printData.actualProductRate && printData.actualProductRate}
                 </Box>
               </Box>
               <Box
@@ -688,6 +690,10 @@ function AddOrder() {
                   {totalQuantity != 0 ? totalQuantity : 0}
                 </Box>
                 
+
+                {
+                  printData.subTotal != printData.actualProductRate ?
+                
                 <Box>
                   <span
                     style={{
@@ -697,8 +703,8 @@ function AddOrder() {
                     {" "}
                     Discount price :{" "}
                   </span>{" "}
-                  {printData.discount == "" ? 0 : printData.discountPrice}
-                </Box>
+                  {printData.subTotal && printData.subTotal  }
+                </Box> : '' }
               </Box>
 
               <Box
