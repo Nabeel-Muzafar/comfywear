@@ -93,13 +93,27 @@ function AddOrderTable({
                   <TableCell align="right">{`${row.discount}%`}</TableCell>
                   <TableCell align="right">{ccyFormat(row.price)}</TableCell>
                   <TableCell align="right">
+                    <Box display={'flex'} gap={'1rem'} justifyContent={'right'}>
                     <Button
-                      size="small"
-                      variant="contained"
+                    color='secondary'
+                    size='medium'
+                      variant='outlined' 
+                      onClick={() => handleProduct(row.product)}
+                    >
+                      Add Qty
+                    </Button>
+                    <Button
+                      size='medium'
+                      variant="contained" 
                       onClick={() => handledeleteRow(i)}
+                      color='error'
+                      
+                      
                     >
                       Delete
                     </Button>
+                   
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}
@@ -124,7 +138,7 @@ function AddOrderTable({
           </Table>
         </TableContainer>
         {/* DiscountPrice */}
-        <Box
+        {/* <Box
           // width={"80%"}
           // mx={"auto"}
 
@@ -176,7 +190,7 @@ function AddOrderTable({
             rows={5}
             defaultValue=""
           />
-        </Box>
+        </Box> */}
       </Box>
     </>
   );

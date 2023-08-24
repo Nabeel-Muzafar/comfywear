@@ -105,6 +105,7 @@ function AddOrder() {
       // Return the content to be printed
       return componentRef.current;
     },
+  
   });
 
   const alreadyExistsInRow = (code) => {
@@ -281,7 +282,6 @@ function AddOrder() {
     setapiLoading(true);
 
     const products = rows.map((p) => {
-      // console.log(p)
       return {
         title: p.product.productTitle,
         code: p.product.productCode,
@@ -297,7 +297,7 @@ function AddOrder() {
     let actualRate = 0
     products.map((items) => {
       totalQuantity += items.qty;
-      actualRate += items.rate;
+      actualRate += items.rate * items.qty;
     });
     settotalQuantity(totalQuantity);
 
@@ -329,14 +329,15 @@ function AddOrder() {
       if (res.data.success) {
 
       toast.success("Order Placed Successfully");
-      handleReset();
       handleOpen();
+      handleReset();
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Error: Order Failed");
-    }
-
+        console.log(error);
+        toast.error("Error: Order Failed");
+      }
+      
+       
     setapiLoading(false);
   };
 
@@ -602,13 +603,12 @@ function AddOrder() {
             </Box>
 
             <TableContainer component={Paper}>
-              <Table aria-label="simple table">
+              <Table size="small" aria-label="simple table">
                 <TableHead>
                   <TableRow sx={{ border: "1px solid gray" }}>
                     <TableCell align="left">Name</TableCell>
                     <TableCell align="right">Qty</TableCell>
                     <TableCell align="right">Rate</TableCell>
-                    <TableCell align="right">Dis%</TableCell>
                     <TableCell align="right">Price</TableCell>
                   </TableRow>
                 </TableHead>
@@ -620,7 +620,6 @@ function AddOrder() {
                           <TableCell align="left">{items.title}</TableCell>
                           <TableCell align="right">{items.qty}</TableCell>
                           <TableCell align="right">{items.rate}</TableCell>
-                          <TableCell align="right">{items.discountPercent}</TableCell>
                           <TableCell align="right">
                             {" "}
                             {items.discountPercent > 0 ?
@@ -657,7 +656,7 @@ function AddOrder() {
                     }}
                   >
                     {" "}
-                    Total Items :{" "}
+                    Total Item :{" "}
                   </span>{" "}
                   {printData.totalItems != 0 ? printData.totalItems : 0}
                 </Box>
@@ -668,7 +667,7 @@ function AddOrder() {
                     }}
                   >
                     {" "}
-                    Original price :{" "}
+                    Subtotal :{" "}
                   </span>{" "}
                   {printData.actualProductRate && printData.actualProductRate}
                 </Box>
