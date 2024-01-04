@@ -243,11 +243,6 @@ LDA Avenue 1 Lahore
             }}
           >
             <div
-            //   style={
-            //     {
-            //       // border: "1px solid red",
-            //     }
-            //   }
             >
               <textarea
                 placeholder="Customer Name"
