@@ -32,6 +32,7 @@ import { useReactToPrint } from "react-to-print";
 import AddOrderTable from "../../components/Table/AddOrderTable";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 const TAX_RATE = 0;
 
 function priceRow(qty, unit) {
@@ -105,7 +106,6 @@ function AddOrder() {
       // Return the content to be printed
       return componentRef.current;
     },
-  
   });
 
   const alreadyExistsInRow = (code) => {
@@ -294,7 +294,7 @@ function AddOrder() {
     });
 
     let totalQuantity = 0;
-    let actualRate = 0
+    let actualRate = 0;
     products.map((items) => {
       totalQuantity += items.qty;
       actualRate += items.rate * items.qty;
@@ -327,17 +327,15 @@ function AddOrder() {
       });
 
       if (res.data.success) {
-
-      toast.success("Order Placed Successfully");
-      handleOpen();
-      handleReset();
+        toast.success("Order Placed Successfully");
+        handleOpen();
+        handleReset();
       }
     } catch (error) {
-        console.log(error);
-        toast.error("Error: Order Failed");
-      }
-      
-       
+      console.log(error);
+      toast.error("Error: Order Failed");
+    }
+
     setapiLoading(false);
   };
 
@@ -531,21 +529,28 @@ function AddOrder() {
               // flexDirection={"column-reverse"}
             >
               <Box flexDirection={"column"}>
-                <Box fontSize={"0.8rem"}>
-                  {printData.branch === "wapdatown"
-                    ? "Shahrah-e-Nazria, near Wapda Town , Block G Pia Housing Scheme"
-                    : printData.branch === "warehouse"
-                    ? "House # 240 A Block, Public Health Society Block A Lda Avenue"
-                    : "Township Branch"}
+                <Box>
+                  <Image
+                    src="/frame.png"
+                    alt="logo"
+                    width={130}
+                    height={130}
+                    quality={100}
+                  />
+                </Box>
+                <Box fontWeight={"medium"} fontSize={"13px"}>
+                  Har suit ab factory rate par!
                 </Box>
 
                 {/* <Box>{printData.branch}</Box> */}
               </Box>
               <Box>
-                <img
-                  src="/logo.png"
+                <Image
+                  src="/logo2.jpeg"
                   alt="logo"
-                  width={"150px"}
+                  width={140}
+                  height={140}
+                  quality={100}
                   // height={"50%"}
                 />
               </Box>
@@ -622,8 +627,9 @@ function AddOrder() {
                           <TableCell align="right">{items.rate}</TableCell>
                           <TableCell align="right">
                             {" "}
-                            {items.discountPercent > 0 ?
-                              `${items.discountPrice}` : items.qty * items.rate}
+                            {items.discountPercent > 0
+                              ? `${items.discountPrice}`
+                              : items.qty * items.rate}
                           </TableCell>
                         </TableRow>
                       );
@@ -688,11 +694,29 @@ function AddOrder() {
                   </span>{" "}
                   {totalQuantity != 0 ? totalQuantity : 0}
                 </Box>
-                
 
-                {
-                  printData.subTotal != printData.actualProductRate ?
-                
+                {printData.subTotal != printData.actualProductRate ? (
+                  <Box>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {" "}
+                      Discount price :{" "}
+                    </span>{" "}
+                    {printData.subTotal && printData.subTotal}
+                  </Box>
+                ) : (
+                  ""
+                )}
+              </Box>
+
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                width={"100%"}
+              >
                 <Box>
                   <span
                     style={{
@@ -700,33 +724,13 @@ function AddOrder() {
                     }}
                   >
                     {" "}
-                    Discount price :{" "}
-                  </span>{" "}
-                  {printData.subTotal && printData.subTotal  }
-                </Box> : '' }
-              </Box>
-
-              <Box
-              display={"flex"}
-              justifyContent={"space-between"}
-              width={"100%"}
-              >
-              <Box>
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {" "}
-                    Paid  :{" "}
+                    Paid :{" "}
                   </span>{" "}
                   {printData.paid != 0 ? printData.paid : 0}
                 </Box>
-              
 
-              <Box>
-                
-                {/* <span
+                <Box>
+                  {/* <span
                   style={{
                     fontWeight: "bold",
                   }}
@@ -735,9 +739,11 @@ function AddOrder() {
                   Discount :{" "}
                 </span>{" "}
                 {printData.discount == "" ? 0 : printData.discount} */}
+                </Box>
               </Box>
-              </Box>
-              <Divider sx={{width:'100%', mx:'auto', border:'1px solid black'}} />
+              <Divider
+                sx={{ width: "100%", mx: "auto", border: "1px solid black" }}
+              />
               <Box>
                 <span
                   style={{
@@ -745,9 +751,8 @@ function AddOrder() {
                   }}
                 >
                   {" "}
-                Total : 
+                  Total :
                 </span>{" "}
-                
                 {printData.total != 0 ? printData.total : 0}
               </Box>
             </Box>
